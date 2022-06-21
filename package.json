@@ -1,0 +1,31 @@
+{
+  "name": "find-your-pet-backend",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Pravi backend za projekt",
+  "main": "Baza.js",
+  "scripts": {
+    "serve": "nodemon src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Meks12/Find-Your-Pet-Backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Meks12/Find-Your-Pet-Backend/issues"
+  },
+  "homepage": "https://github.com/Meks12/Find-Your-Pet-Backend#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "mongodb": "^4.7.0",
+    "mongoose": "^6.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
+  }
+}
