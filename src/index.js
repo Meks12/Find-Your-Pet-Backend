@@ -41,6 +41,12 @@ app.post("/prijavanestanka", async (req,res) => {
     res.send();
 });
 
+/*
+app.delete("/prijavanestanka/:id", (req,res) =>{
+    let { id } = req.params;
+})
+*/
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 });
