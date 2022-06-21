@@ -17,10 +17,10 @@ app.get('/', (req, res) => {
 
 let counter = 0;
 
-app.get("/pronadiljubimca", async (req, res) =>{
+app.get("/prijavanestanka", async (req, res) =>{
     console.log(++counter);
     let db = await connect();
-    let kolekcija = db.collection("pronadiljubimca");
+    let kolekcija = db.collection("/prijavanestanka");
     let cursor = await kolekcija.find();
     let data = await cursor.toArray();
 
@@ -33,7 +33,7 @@ app.post("/prijavanestanka", async (req,res) => {
     console.log(doc);
 
     let db = await connect();
-    let kolekcija = db.collection("prijavanestanka");
+    let kolekcija = db.collection("/prijavanestanka");
 
     let result = await kolekcija.insertOne(doc)
 

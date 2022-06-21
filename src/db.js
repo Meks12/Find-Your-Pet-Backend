@@ -16,7 +16,7 @@ import mongo from "mongodb";
     export default async () =>{
         if (!db || !isConnected()) {
             await client.connect();
-            db = client.db("petfinder");
+            db = client.db("pfinder");
             console.log("Connected OK");
         }
         return db;
