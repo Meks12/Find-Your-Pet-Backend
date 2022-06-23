@@ -1,5 +1,6 @@
 import mongo from "mongodb";
 
+// spajanje lokalno
 
     let connection_string = "mongodb://localhost:27017/";
    
