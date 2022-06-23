@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 });
 
-// Ovaj get služi za dohvaćanje podataka koji su poslani POST metodom
+// Ovaj get služi za dohvaćanje podataka koji su poslani POST metodom (prijavljujemo nestanak ljubimca tako da dajemo sve podatke o njemu)
 
 app.get("/prijavanestanka", async (req, res) =>{
     let db = await connect();
@@ -88,6 +88,72 @@ app.delete("/prijavanestanka/:id", async (req,res) =>{
 
   });
 
+  // Upis podataka o vlasnicima
+
+  app.post("/podacivlasnika", async (req,res) => {
+    let doc = req.body;
+    console.log(doc);
+
+    let db = await connect();
+    let kolekcija = db.collection("/podacivlasnika");
+
+    let result = await kolekcija.insertOne(doc)
+
+    res.status(201);
+    res.send();
+});
+
+
+// getanje vlasnika iz baze
+app.get("/podacivlasnika", async (req, res) =>{
+  let db = await connect();
+  let kolekcija = db.collection("/podacivlasnika");
+  let cursor = await kolekcija.find();
+  let data = await cursor.toArray();
+
+  res.json(data);
+});
+
+
+// brisanje vlasnika iz baze
+app.delete("/podacivlasnika/:id", async (req,res) =>{
+  let doc = req.body;
+  let id = req.params.id;
+
+  delete doc._id;
+
+  let db = await connect();
+
+  let result = await db.collection("/podacivlasnika").deleteOne({_id: mongo.ObjectId(id)}, {$set: doc});
+
+  if (result && result.deletedCount == 1) {
+    res.json({status: "Deleted"});
+  } else {
+    res.json({status: "Failed"});
+  }
+
+});
+
+
+// popravljanje podataka u bazi preko dohvata id-a
+app.patch("/podacivlasnika/:id", async (req,res) =>{
+  let doc = req.body;
+  let id = req.params.id;
+
+  delete doc._id;
+
+ let db = await connect();
+
+ let result = await db.collection("/podacivlasnika").updateOne({_id: mongo.ObjectId(id)}, {$set: doc});
+  
+ if (result && result.modifiedCount == 1) {
+  let doc = await db.collection("/podacivlasnika").findOne({_id: mongo.ObjectId(id)});
+  res.json(doc);
+ } else {
+  res.json({ status: "Failed"});
+ }
+
+});
 
 
 
