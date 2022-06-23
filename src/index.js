@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 });
 
-
+// Ovaj get služi za dohvaćanje podataka koji su poslani POST metodom
 
 app.get("/prijavanestanka", async (req, res) =>{
     let db = await connect();
@@ -26,6 +26,9 @@ app.get("/prijavanestanka", async (req, res) =>{
     res.json(data);
 });
 
+
+// U ovoj post metodi iz frontenda uzimam ime ljubimca kojeg zelimo prijaviti kao nestalog, broj mobitela, mjesto gdje je zadnji put viđen, vrstu psa, njegov spol te datum nestanka. 
+// na frontendu pomoću gumba spremi saljem ovdje podatke
 
 app.post("/prijavanestanka", async (req,res) => {
     let doc = req.body;
@@ -40,6 +43,8 @@ app.post("/prijavanestanka", async (req,res) => {
     res.send();
 });
 
+
+// Delete služi kako bi izbrisao prijavu nestanka koja je spremljena u bazi. Brišem tako da mu dam specifičan id koji je jedinstven za svaku prijavu nestanka.
 
 app.delete("/prijavanestanka/:id", async (req,res) =>{
     let doc = req.body;
@@ -58,6 +63,10 @@ app.delete("/prijavanestanka/:id", async (req,res) =>{
     }
 
   });
+
+
+// Patch služi za ispravljanje eventualnih pogrešaka nakon slanja u bazu podataka. Radi tako da prosljedimo id prijave koje želimo mijenjat.
+
 
   app.patch("/prijavanestanka/:id", async (req,res) =>{
     let doc = req.body;
