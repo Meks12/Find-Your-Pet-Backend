@@ -1,7 +1,8 @@
 import express from "express";
 import cors from "cors";
+import connect from "./db.js";
+import  mongo  from "mongodb";
 
-import connect from "./db.js"
 
 const app = express()
 const port = 3001
@@ -15,10 +16,8 @@ app.get('/', (req, res) => {
 });
 
 
-let counter = 0;
 
 app.get("/prijavanestanka", async (req, res) =>{
-    console.log(++counter);
     let db = await connect();
     let kolekcija = db.collection("/prijavanestanka");
     let cursor = await kolekcija.find();
@@ -41,11 +40,47 @@ app.post("/prijavanestanka", async (req,res) => {
     res.send();
 });
 
-/*
-app.delete("/prijavanestanka/:id", (req,res) =>{
-    let { id } = req.params;
-})
-*/
+
+app.delete("/prijavanestanka/:id", async (req,res) =>{
+    let doc = req.body;
+    let id = req.params.id;
+
+    delete doc._id;
+
+    let db = await connect();
+
+    let result = await db.collection("/prijavanestanka").deleteOne({_id: mongo.ObjectId(id)}, {$set: doc});
+
+    if (result && result.deletedCount == 1) {
+      res.json({status: "Deleted"});
+    } else {
+      res.json({status: "Failed"});
+    }
+
+  });
+
+  app.patch("/prijavanestanka/:id", async (req,res) =>{
+    let doc = req.body;
+    let id = req.params.id;
+
+    delete doc._id;
+
+   let db = await connect();
+
+   let result = await db.collection("/prijavanestanka").updateOne({_id: mongo.ObjectId(id)}, {$set: doc});
+    
+   if (result && result.modifiedCount == 1) {
+    let doc = await db.collection("/prijavanestanka").findOne({_id: mongo.ObjectId(id)});
+    res.json(doc);
+   } else {
+    res.json({ status: "Failed"});
+   }
+
+  });
+
+
+
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
