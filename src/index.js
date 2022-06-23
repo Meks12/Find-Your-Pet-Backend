@@ -66,7 +66,7 @@ app.delete("/prijavanestanka/:id", async (req,res) =>{
 
 
 // Patch služi za ispravljanje eventualnih pogrešaka nakon slanja u bazu podataka. Radi tako da prosljedimo id prijave koje želimo mijenjat. 
-//CRUD
+// 4 crud funkcionalnosti
 
 
   app.patch("/prijavanestanka/:id", async (req,res) =>{
