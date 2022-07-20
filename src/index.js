@@ -1,11 +1,11 @@
 import express from "express";
 import cors from "cors";
 import connect from "./db.js";
-import  mongo  from "mongodb";
+import mongo from "mongodb";
 
 
 const app = express()
-const port = 3001
+const port = 3000
 
 
 app.use(cors());
@@ -17,95 +17,95 @@ app.get('/', (req, res) => {
 
 // Ovaj get služi za dohvaćanje podataka koji su poslani POST metodom (prijavljujemo nestanak ljubimca tako da dajemo sve podatke o njemu)
 
-app.get("/prijavanestanka", async (req, res) =>{
-    let db = await connect();
-    let kolekcija = db.collection("/prijavanestanka");
-    let cursor = await kolekcija.find();
-    let data = await cursor.toArray();
+app.get("/prijavanestanka", async (req, res) => {
+  let db = await connect();
+  let kolekcija = db.collection("/prijavanestanka");
+  let cursor = await kolekcija.find();
+  let data = await cursor.toArray();
 
-    res.json(data);
+  res.json(data);
 });
 
 
 // U ovoj post metodi iz frontenda uzimam ime ljubimca kojeg zelimo prijaviti kao nestalog, broj mobitela, mjesto gdje je zadnji put viđen, vrstu psa, njegov spol te datum nestanka. 
 // na frontendu pomoću gumba spremi saljem ovdje podatke
 
-app.post("/prijavanestanka", async (req,res) => {
-    let doc = req.body;
-    console.log(doc);
+app.post("/prijavanestanka", async (req, res) => {
+  let doc = req.body;
+  console.log(doc);
 
-    let db = await connect();
-    let kolekcija = db.collection("/prijavanestanka");
+  let db = await connect();
+  let kolekcija = db.collection("/prijavanestanka");
 
-    let result = await kolekcija.insertOne(doc)
+  let result = await kolekcija.insertOne(doc)
 
-    res.status(201);
-    res.send();
+  res.status(201);
+  res.send();
 });
 
 
 // Delete služi kako bi izbrisao prijavu nestanka koja je spremljena u bazi. Brišem tako da mu dam specifičan id koji je jedinstven za svaku prijavu nestanka.
 
-app.delete("/prijavanestanka/:id", async (req,res) =>{
-    let doc = req.body;
-    let id = req.params.id;
+app.delete("/prijavanestanka/:id", async (req, res) => {
+  let doc = req.body;
+  let id = req.params.id;
 
-    delete doc._id;
+  delete doc._id;
 
-    let db = await connect();
+  let db = await connect();
 
-    let result = await db.collection("/prijavanestanka").deleteOne({_id: mongo.ObjectId(id)}, {$set: doc});
+  let result = await db.collection("/prijavanestanka").deleteOne({ _id: mongo.ObjectId(id) }, { $set: doc });
 
-    if (result && result.deletedCount == 1) {
-      res.json({status: "Deleted"});
-    } else {
-      res.json({status: "Failed"});
-    }
+  if (result && result.deletedCount == 1) {
+    res.json({ status: "Deleted" });
+  } else {
+    res.json({ status: "Failed" });
+  }
 
-  });
+});
 
 
 // Patch služi za ispravljanje eventualnih pogrešaka nakon slanja u bazu podataka. Radi tako da prosljedimo id prijave koje želimo mijenjat. 
 // 4 crud funkcionalnosti
 
 
-  app.patch("/prijavanestanka/:id", async (req,res) =>{
-    let doc = req.body;
-    let id = req.params.id;
+app.patch("/prijavanestanka/:id", async (req, res) => {
+  let doc = req.body;
+  let id = req.params.id;
 
-    delete doc._id;
+  delete doc._id;
 
-   let db = await connect();
+  let db = await connect();
 
-   let result = await db.collection("/prijavanestanka").updateOne({_id: mongo.ObjectId(id)}, {$set: doc});
-    
-   if (result && result.modifiedCount == 1) {
-    let doc = await db.collection("/prijavanestanka").findOne({_id: mongo.ObjectId(id)});
+  let result = await db.collection("/prijavanestanka").updateOne({ _id: mongo.ObjectId(id) }, { $set: doc });
+
+  if (result && result.modifiedCount == 1) {
+    let doc = await db.collection("/prijavanestanka").findOne({ _id: mongo.ObjectId(id) });
     res.json(doc);
-   } else {
-    res.json({ status: "Failed"});
-   }
+  } else {
+    res.json({ status: "Failed" });
+  }
 
-  });
+});
 
-  // Upis podataka o vlasnicima
+// Upis podataka o vlasnicima
 
-  app.post("/podacivlasnika", async (req,res) => {
-    let doc = req.body;
-    console.log(doc);
+app.post("/podacivlasnika", async (req, res) => {
+  let doc = req.body;
+  console.log(doc);
 
-    let db = await connect();
-    let kolekcija = db.collection("/podacivlasnika");
+  let db = await connect();
+  let kolekcija = db.collection("/podacivlasnika");
 
-    let result = await kolekcija.insertOne(doc)
+  let result = await kolekcija.insertOne(doc)
 
-    res.status(201);
-    res.send();
+  res.status(201);
+  res.send();
 });
 
 
 // getanje vlasnika iz baze
-app.get("/podacivlasnika", async (req, res) =>{
+app.get("/podacivlasnika", async (req, res) => {
   let db = await connect();
   let kolekcija = db.collection("/podacivlasnika");
   let cursor = await kolekcija.find();
@@ -116,7 +116,7 @@ app.get("/podacivlasnika", async (req, res) =>{
 
 
 // brisanje vlasnika iz baze
-app.delete("/podacivlasnika/:id", async (req,res) =>{
+app.delete("/podacivlasnika/:id", async (req, res) => {
   let doc = req.body;
   let id = req.params.id;
 
@@ -124,34 +124,34 @@ app.delete("/podacivlasnika/:id", async (req,res) =>{
 
   let db = await connect();
 
-  let result = await db.collection("/podacivlasnika").deleteOne({_id: mongo.ObjectId(id)}, {$set: doc});
+  let result = await db.collection("/podacivlasnika").deleteOne({ _id: mongo.ObjectId(id) }, { $set: doc });
 
   if (result && result.deletedCount == 1) {
-    res.json({status: "Deleted"});
+    res.json({ status: "Deleted" });
   } else {
-    res.json({status: "Failed"});
+    res.json({ status: "Failed" });
   }
 
 });
 
 
 // popravljanje podataka u bazi preko dohvata id-a
-app.patch("/podacivlasnika/:id", async (req,res) =>{
+app.patch("/podacivlasnika/:id", async (req, res) => {
   let doc = req.body;
   let id = req.params.id;
 
   delete doc._id;
 
- let db = await connect();
+  let db = await connect();
 
- let result = await db.collection("/podacivlasnika").updateOne({_id: mongo.ObjectId(id)}, {$set: doc});
-  
- if (result && result.modifiedCount == 1) {
-  let doc = await db.collection("/podacivlasnika").findOne({_id: mongo.ObjectId(id)});
-  res.json(doc);
- } else {
-  res.json({ status: "Failed"});
- }
+  let result = await db.collection("/podacivlasnika").updateOne({ _id: mongo.ObjectId(id) }, { $set: doc });
+
+  if (result && result.modifiedCount == 1) {
+    let doc = await db.collection("/podacivlasnika").findOne({ _id: mongo.ObjectId(id) });
+    res.json(doc);
+  } else {
+    res.json({ status: "Failed" });
+  }
 
 });
 

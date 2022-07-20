@@ -2,7 +2,7 @@ import mongo from "mongodb";
 
 // spajanje lokalno na mongodb
 
-    let connection_string = "mongodb://localhost:27017/";
+    let connection_string = "mongodb+srv://admin:admin@cluster0.upjf8.mongodb.net/test/";
    
     let client = new mongo.MongoClient(connection_string, {
         useNewUrlParser: true,
