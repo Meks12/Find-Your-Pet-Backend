@@ -156,6 +156,14 @@ app.patch("/podacivlasnika/:id", async (req, res) => {
 });
 
 
+app.get("/pronadiljubimca", async (req, res) => {
+  let db = await connect();
+  let kolekcija = db.collection("/podacivlasnika");
+  let cursor = await kolekcija.find();
+  let data = await cursor.toArray();
+
+  res.json(data);
+});
 
 
 app.listen(port, () => {
