@@ -24,6 +24,17 @@ app.get("/prijavanestanka", async (req, res) => {
   res.json(data);
 });
 
+// Dohvat jednog ljubimca
+
+app.get("/prijavanestanka/:id", async (req, res) => {
+  let db = await connect();
+  let kolekcija = db.collection("/prijavanestanka");
+  let cursor = await kolekcija.find();
+  let data = await cursor.toArray();
+
+  res.json(data);
+});
+
 // U ovoj post metodi iz frontenda uzimam ime ljubimca kojeg zelimo prijaviti kao nestalog, broj mobitela, mjesto gdje je zadnji put viđen, vrstu psa, njegov spol te datum nestanka.
 // na frontendu pomoću gumba spremi saljem ovdje podatke
 
