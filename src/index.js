@@ -180,6 +180,15 @@ app.get("/pronadiljubimca", async (req, res) => {
   res.json(data);
 });
 
+app.get("/podacivlasnika/:id", async (req, res) => {
+  let db = await connect();
+  let kolekcija = db.collection("/podacivlasnika");
+  let cursor = await kolekcija.find();
+  let data = await cursor.toArray();
+
+  res.json(data);
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
